@@ -1,0 +1,195 @@
+Question 1
+
+
+#DECLARE StackVowel : ARRAY[0:99] OF STRING
+#DECLARE StackConsonant : ARRAY[0:99] OF STRING
+global StackVowel
+global StackConsonant
+StackVowel = [""] * 100
+StackConsonant = [""] * 100
+
+global VowelTop
+global ConsonantTop
+VowelTop = 0 # integer
+ConsonantTop = 0 # integer
+
+def PushData(Letter):
+    global StackVowel
+    global StackConsonant
+    global VowelTop
+    global ConsonantTop
+
+    if Letter == "a" or Letter == "e" or Letter == "i" or Letter == "o" or Letter == "u":
+        if VowelTop == 100:
+            print("The Vowel Stack Is Full")
+        else:
+            StackVowel[VowelTop] = Letter
+            VowelTop = VowelTop + 1
+    else:
+        if ConsonantTop == 100:
+            print("The Consonant Stack Is Full")
+        else:
+            StackConsonant[ConsonantTop] = Letter
+            ConsonantTop = ConsonantTop + 1
+
+
+def ReadData():
+    try:
+        file = open("StackData.txt", "r")
+        for line in file:
+            PushData(line.strip())
+        file.close()
+    except IOError:
+        print("The File Does Not Exist")
+
+
+def PopVowel():
+    global StackVowel
+    global VowelTop
+
+    if VowelTop == 0:
+        return "No data"
+    else:
+        VowelTop = VowelTop - 1
+        PoppedItem = StackVowel[VowelTop]
+        return PoppedItem
+
+def PopConsonant():
+    global StackConsonant
+    global ConsonantTop
+
+    if ConsonantTop == 0:
+        return "No data"
+    else:
+        ConsonantTop = ConsonantTop - 1
+        PoppedItem = StackConsonant[ConsonantTop]
+        return PoppedItem
+
+ReadData()
+
+combine = ""
+
+for x in range(5):
+    UserChoice = input("Enter a Vowel or Consonant: ")
+    if UserChoice.lower() == "vowel":
+        PoppedVowel = PopVowel()
+        if PoppedVowel == "No data":
+            print("No Vowels Available")
+        else:
+            combine = combine + PoppedVowel
+    elif UserChoice.lower() == "consonant":
+        PoppedConsonant = PopConsonant()
+        if PoppedConsonant == "No data":
+            print("Now Consonant Available")
+        else:
+            combine = combine + PoppedConsonant
+print(combine)
+
+
+
+
+***************************************************************
+
+Question 2
+
+def IterativeCalculate(Number):
+    Total = 0
+    ToFind = Number
+    while Number != 0:
+        if ToFind % Number == 0:
+            Total = Total + Number
+        Number = Number - 1
+    return Total
+
+temp = IterativeCalculate(10)
+print(temp)
+
+
+def Recursivevalue(Number, ToFind):
+    if Number == 0:
+        return 0
+    else:
+        if ToFind % Number == 0:
+            return Number + Recursivevalue(Number -1, ToFind)
+        else:
+            return Recursivevalue(Number - 1, ToFind)
+
+
+temp2 = Recursivevalue(50, 50)
+print("Recursive:", temp2)
+
+
+
+****************************************************************
+
+Question 3
+
+import datetime
+
+class Character():
+    #PRIVATE CharacterName : STRING
+    #PRIVATE DateOfBirth : DATE
+    #PRIVATE Intelligence : REAL
+    #PRIVATE Speed : INTEGER
+
+    def __init__(self, CharacterNameP, DateOfBirthP, IntelligenceP, SpeedP):
+        self.__CharacterName = CharacterNameP
+        self.__DateOfBirth = DateOfBirthP
+        self.__Intelligence = IntelligenceP
+        self.__Speed = SpeedP
+
+    def GetIntelligence(self):
+        return self.__Intelligence
+
+    def GetName(self):
+        return self.__CharacterName
+
+    def SetIntelligence(self, NewIntelligenceP):
+        self.__Intelligence = NewIntelligenceP
+
+    def Learn(self):
+        self.__Intelligence = self.__Intelligence + (self.__Intelligence * 0.1)
+
+    def ReturnAge(self):
+        Age = 2023 - self.__DateOfBirth.year
+        return Age
+
+
+class MagicCharacter(Character):
+    #PRIVATE Element : STRING
+    def __init__(self, CharacterNameP, DateOfBirthP, IntelligenceP, SpeedP, ElementP):
+        super().__init__(CharacterNameP, DateOfBirthP, IntelligenceP, SpeedP)
+        self.__Element = ElementP
+
+    def Learn(self):
+        if self.__Element == "fire" or self.__Element == "water":
+            newintelligence = super().GetIntelligence() + (super().GetIntelligence() * 0.2)
+        elif self.__Element == "earth":
+            newintelligence = super().GetIntelligence() + (super().GetIntelligence() * 0.3)
+        else:
+            newintelligence = super().GetIntelligence() + (super().GetIntelligence() * 0.1)
+
+        super().SetIntelligence(newintelligence)
+
+
+
+
+FirstCharacter = Character("Royal", datetime.datetime(2019, 1, 1), 70.0, 30)
+FirstCharacter.Learn()
+Name = FirstCharacter.GetName()
+Age = FirstCharacter.ReturnAge()
+Intelligence = FirstCharacter.GetIntelligence()
+print(Name, "is", Age, "years old and his intelligence is", Intelligence)
+
+
+FirstMagic = MagicCharacter("Light", datetime.datetime(2018, 3, 3), 75.0, 22, "fire")
+FirstMagic.Learn()
+Name2 = FirstMagic.GetName()
+Age2 = FirstMagic.ReturnAge()
+Intelligence2 = FirstMagic.GetIntelligence()
+print(Name2, "is", Age2, "years old and his intelligence is", Intelligence2)
+
+
+
+
+

@@ -1,0 +1,223 @@
+Question 1
+
+def IterativeVowels(Value):
+    Total = 0
+    lengthString = len(Value)
+    for x in range(lengthString):
+        FirstCharacter = Value[0]
+        if FirstCharacter == "a" or FirstCharacter == "e" or FirstCharacter == "i" or FirstCharacter == "o" or FirstCharacter == "u":
+            Total = Total + 1
+        Value = Value[1 : lengthString]
+    return Total
+
+temp = IterativeVowels("house")
+print("Iterative:", temp)
+
+def RecursiveVowels(Value):
+
+    if len(Value) == 0:
+        return 0
+    else:
+        FirstCharacter = Value[0]
+        if FirstCharacter == "a" or FirstCharacter == "e" or FirstCharacter == "i" or FirstCharacter == "o" or FirstCharacter == "u":
+            Value = Value[1: len(Value)]
+            return 1 + RecursiveVowels(Value)
+        else:
+            Value = Value[1: len(Value)]
+            return 0 + RecursiveVowels(Value)
+
+temp2 = RecursiveVowels("imagine")
+print("Recursive:", temp2)
+
+
+
+******************************************************************
+
+Question 2
+
+# DECLARE Queue : ARRAY[0:49] OF STRING
+global Queue
+global HeadPointer # int
+global TailPointer # int
+Queue = [""] * 50
+HeadPointer = -1
+TailPointer = 0
+
+def Enqueue(Value):
+    global Queue
+    global HeadPointer
+    global TailPointer
+
+    if TailPointer == 50:
+        print("The Queue Is Full")
+    else:
+        Queue[TailPointer] = Value
+        TailPointer = TailPointer + 1
+        if HeadPointer == -1:
+            HeadPointer = 0
+
+def Dequeue():
+    global Queue
+    global TailPointer
+    global HeadPointer
+
+    if HeadPointer == -1:
+        print("The Queue Is Empty")
+        return "Empty"
+    else:
+        RemovedItem = Queue[HeadPointer]
+        HeadPointer = HeadPointer + 1
+
+    if HeadPointer == TailPointer:
+        HeadPointer = -1
+        TailPointer = 0
+    return RemovedItem
+
+
+def ReadData():
+    try:
+        file = open("QueueData.txt", "r")
+        for line in file:
+            Enqueue(line.strip())
+        file.close()
+    except IOError:
+        print("File Does Not Exist")
+
+
+class RecordData():
+    #PUBLIC ID : STRING
+    #PUBLIC Total : INTEGER
+    def __init__(self, IDP, TotalP):
+        self.ID = IDP
+        self.Total = TotalP
+
+#DECLARE Records : ARRAY[0:49] OF RecordData
+global Records
+global NumberRecords
+NumberRecords = 0
+Records = []
+for x in range(50):
+    Records.append(RecordData("", 0))
+
+def TotalData():
+    global NumberRecords
+    global Records
+
+    DataAccessed = Dequeue()
+    Flag = False
+    if NumberRecords == 0:
+        Records[NumberRecords].ID = DataAccessed
+        Records[NumberRecords].Total = 1
+        Flag = True
+        NumberRecords = NumberRecords + 1
+    else:
+        for x in range(0, NumberRecords):
+            if Records[x].ID == DataAccessed:
+                Records[x].Total = Records[x].Total + 1
+                Flag = True
+
+    if Flag == False:
+        Records[NumberRecords].ID = DataAccessed
+        Records[NumberRecords].Total = 1
+        NumberRecords = NumberRecords + 1
+
+
+def OutputRecords():
+    global NumberRecords
+    for x in range(NumberRecords):
+        print("ID", Records[x].ID, "Total", Records[x].Total)
+
+ReadData()
+while HeadPointer != -1:
+    TotalData()
+OutputRecords()
+
+
+
+
+*************************************************************************
+
+Question 3
+
+
+class Character():
+    #PRIVATE Name : STRING
+    #PRIVATE XPosition : INTEGER
+    #PRIVATE YPosition : INTEGER
+    def __init__(self, NameP, XPositionP, YPositionP):
+        self.__Name = NameP
+        self.__XPosition = XPositionP
+        self.__YPosition = YPositionP
+
+    def GetXPosition(self):
+        return self.__XPosition
+
+    def GetYPosition(self):
+        return self.__YPosition
+
+    def SetXPosition(self, NewXPosition):
+        if NewXPosition > 10000:
+            NewXPosition = 10000
+        elif NewXPosition < 0:
+            NewXPosition = 0
+
+        self.__XPosition = NewXPosition
+
+    def SetYPosition(self, NewYPosition):
+        if NewYPosition > 10000:
+            NewYPosition = 10000
+        elif NewYPosition < 0:
+            NewYPosition = 0
+
+        self.__YPosition = NewYPosition
+
+    def Move(self, Direction):
+        if Direction == "up":
+            self.__YPosition = self.__YPosition + 10
+        elif Direction == "down":
+            self.__YPosition = self.__YPosition - 10
+        elif Direction == "left":
+            self.__XPosition = self.__XPosition - 10
+        elif Direction == "right":
+            self.__XPosition = self.__XPosition + 10
+
+
+Jack = Character("Jack", 50, 50)
+
+class BikeCharacter(Character):
+    def __init__(self, NameP, XPositionP, YPositionP):
+        super().__init__(NameP, XPositionP, YPositionP)
+
+    def Move(self, Direction):
+        if Direction == "up":
+            super().SetYPosition(super().GetYPosition() + 20)
+        elif Direction == "down":
+            super().SetYPosition(super().GetYPosition() - 20)
+        elif Direction == "left":
+            super().SetXPosition(super().GetXPosition() - 20)
+        elif Direction == "right":
+            super().SetXPosition(super().GetXPosition() + 20)
+
+Karla = BikeCharacter("Karla", 100, 50)
+
+UserCharacter = input("Choose Character : Jack or Karala: ")
+UserDirection = input("Direction: up, down, left, right: ")
+
+if UserCharacter == "Jack":
+    Jack.Move(UserDirection)
+    Xvalue = Jack.GetXPosition()
+    Yvalue = Jack.GetYPosition()
+    print("Jack's new position is X =", Xvalue, "Y =", Yvalue)
+elif UserCharacter == "Karala":
+    Karla.Move(UserDirection)
+    Xvalue = Karla.GetXPosition()
+    Yvalue = Karla.GetYPosition()
+    print("Karala's new position is X =", Xvalue, "Y =", Yvalue)
+
+
+
+
+
+
+
+
